@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class PhotoCenterApplication {
 
 	public static void main(String[] args) {
-		System.out.println("fsdfsadfsaf");
 		SpringApplication.run(PhotoCenterApplication.class, args);
 	}
 
