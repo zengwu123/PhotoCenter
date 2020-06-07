@@ -16,7 +16,7 @@ public class HandleControllerException {
     public String handleException(RuntimeException e) {
         if (e instanceof AccessDeniedException) {
             //如果是权限不足异常，则跳转到权限不足页面
-            return "/403";
+            return "/error/403";
         }
         //其余异常都到500页面
         return "/500";

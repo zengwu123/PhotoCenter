@@ -31,27 +31,34 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         //允许基于HttpServletRequest使用限制访问
         http.authorizeRequests()
                 //不需要身份认证
-                .antMatchers("/", "/index", "/home", "/toLogin", "/**/customer/**").permitAll()
-                .antMatchers("/js/**", "/lay/**", "/layui.js", "/css/**", "/images/**", "/front/**", "/doc/**").permitAll()
-                .antMatchers("/user/**").hasAnyRole("USER")
-                //.hasIpAddress()//读取配置权限配置
-                .antMatchers("/user/**").access("hasRole('ADMIN')")
+                .antMatchers( "/toLogin", "/login").permitAll()
+                .antMatchers("/static/**").permitAll()
+
+                //权限配置
+                .antMatchers("/","/index").hasRole("ADMIN")
+                .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/user/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
+
                 //自定义登录界面
                 .and().formLogin().loginPage("/toLogin").loginProcessingUrl("/login").failureUrl("/toLogin?error").permitAll()
                 .and().exceptionHandling().accessDeniedPage("/toLogin?deny")
                 .and().httpBasic()
                 .and().sessionManagement().invalidSessionUrl("/toLogin")
                 .and().csrf().disable();
+
         //开启注销操作，并定制注销跳转页面
         http.logout()
                 .logoutSuccessUrl("/toLogin")
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .invalidateHttpSession(true)
                 .deleteCookies();
+
+        http.headers().frameOptions().disable();
     }
 
     @Override

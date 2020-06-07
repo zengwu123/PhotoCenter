@@ -19,6 +19,6 @@ spring:
             testOnReturn: true
             validationQuery: SELECT 1 from dual
             connectionProperties: config.decrypt=false
+    ##开发过程中建议关闭缓存
     thymeleaf:
-        ##开发过程中建议关闭缓存
         cache: false

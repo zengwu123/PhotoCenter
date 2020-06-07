@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
 <head>
-    <title>Spring Boot管理后台</title>
+    <title>YY - 相册中心</title>
     <style>
         .logo{
             width: 30px;
@@ -16,7 +16,7 @@
             // initData();
             $("#menus").on("click", ".changeUrl", function() {
                 var id = $(this).attr("id");
-                var url = baseURL+$(this).attr("value");
+                var url = "/"+$(this).attr("value");
 
                 /*<![CDATA[*/
                 if(id && url){
@@ -54,6 +54,7 @@
                     type: 'get',
                     success: function (json) {
                         try {
+                            console.log(json.data);
                             window.location.href = "/";
                         } catch (e) {
                             window.location.href = "/";
@@ -89,7 +90,7 @@
         <div class="navbar-header pull-left">
             <a th:href="@{/}"  class="navbar-brand" style="height: 45px;">
                 <small>
-                    <img class="logo"  th:src="@{/assets/images/logo.png}" /> SpringBoot教程管理
+                    <img class="logo"  th:src="@{/assets/images/logo.png}" /> YY - 相册中心
                 </small>
             </a>
         </div>
@@ -282,7 +283,7 @@
                         <li><a href="#"> <i class="icon-cog"></i> 设置</a></li>
                         <li><a href="#"> <i class="icon-user"></i> 个人资料</a></li>
                         <li class="divider"></li>
-                        <li><a id="outLogin" href="#"> <i class="icon-off"></i>退出</a></li>
+                        <li><a th:href="@{/logout}"> <i class="icon-off"></i>退出</a></li>
                     </ul>
                 </li>
             </ul>
@@ -312,6 +313,12 @@
                                 SpringBoot学习资料
                             </a>
                         </li>
+                        <li>
+                            <a id="learn1" value="learn1" class="changeUrl">
+                                <i class="icon-double-angle-right"></i>
+                                江西省吉安市民政局
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li>
@@ -337,7 +344,7 @@
                         </li>
                     </ul>
                 </li>
-               <!--
+
                 <li>
                     <a href="#" class="dropdown-toggle">
                         <i class="icon-list"></i>
@@ -414,7 +421,7 @@
                         </li>
                     </ul>
                 </li>
-                -->
+
             </ul>
             <div class="sidebar-collapse" id="sidebar-collapse">
                 <i class="icon-double-angle-left"
