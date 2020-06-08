@@ -1,4 +1,5 @@
 var loading;
+var baseURL = '/';
 $(function(){
     $(window).resize(function(){
         $("#jqGrid").setGridWidth($(window).width()*0.95);

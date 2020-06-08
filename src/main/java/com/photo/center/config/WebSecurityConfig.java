@@ -1,6 +1,6 @@
 package com.photo.center.config;
 
-import com.photo.center.domain.SysUser;
+import com.photo.center.domain.admin.SysUser;
 import com.photo.center.service.PasswordEncoder;
 import com.photo.center.service.UserService;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 //不需要身份认证
                 .antMatchers( "/toLogin", "/login").permitAll()
-                .antMatchers("/static/**").permitAll()
+                .antMatchers("/assets/**").permitAll()
 
                 //权限配置
                 .antMatchers("/","/index").hasRole("ADMIN")

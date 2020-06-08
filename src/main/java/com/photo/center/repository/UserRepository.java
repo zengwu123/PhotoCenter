@@ -1,6 +1,6 @@
 package com.photo.center.repository;
 
-import com.photo.center.domain.SysUser;
+import com.photo.center.domain.admin.SysUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface UserRepository<T extends SysUser>  extends JpaRepository<SysUser, Integer> {
+public interface UserRepository extends JpaRepository<SysUser, Long> {
     /**
      * 根据用户名获取用户详情信息
      * @param userName

@@ -1,6 +1,6 @@
 package com.photo.center.service;
 
-import com.photo.center.domain.SysUser;
+import com.photo.center.domain.admin.SysUser;
 import com.photo.center.repository.UserRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,7 +23,7 @@ import java.util.List;
 public class UserService<T extends SysUser> implements UserDetailsService {
 
     @Resource
-    private UserRepository<SysUser> repository;
+    private UserRepository repository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -34,13 +34,12 @@ public class UserService<T extends SysUser> implements UserDetailsService {
             }
             //用户权限
             List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-            if (StringUtils.isNotBlank(user.getRoles())) {
-                String[] roles = user.getRoles().split(",");
-                for (String role : roles) {
-                    if (StringUtils.isNotBlank(role)) {
-                        authorities.add(new SimpleGrantedAuthority(role.trim()));
+            if (user.getRoleList().size() > 0) {
+                user.getRoleList().forEach(sysRole -> {
+                    if (StringUtils.isNotBlank(sysRole.getRoleName())) {
+                        authorities.add(new SimpleGrantedAuthority(sysRole.getRoleName().trim()));
                     }
-                }
+                });
             }
             return new User(user.getUserName(), user.getPassword(), authorities);
         } catch (Exception e) {
