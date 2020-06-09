@@ -39,9 +39,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/assets/**").permitAll()
 
                 //权限配置
-                .antMatchers("/","/index").hasRole("ADMIN")
-                .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/user/**").hasRole("ADMIN")
+                .antMatchers("/","/index").hasAnyRole("ADMIN","USER")
+                .antMatchers("/learn/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/learn1/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
 
                 //自定义登录界面

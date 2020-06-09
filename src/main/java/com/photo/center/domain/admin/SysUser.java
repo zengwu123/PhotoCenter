@@ -44,7 +44,7 @@ public class SysUser implements Cloneable, Serializable {
 
     @ManyToMany(fetch = FetchType.EAGER) // 立即从数据库中进行加载数据
     @JoinTable(name = "SysUserRole", joinColumns = { @JoinColumn(name = "uid") }, inverseJoinColumns = {
-            @JoinColumn(name = "roleId") })
+            @JoinColumn(name = "rid") })
     private List<SysRole> roleList;// 一个用户具有多个角色
 
 }

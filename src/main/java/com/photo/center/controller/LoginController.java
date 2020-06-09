@@ -1,10 +1,8 @@
 package com.photo.center.controller;
 
-import com.photo.center.domain.SysUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,24 +29,24 @@ public class LoginController {
         return "main";
     }
 
-    @RequestMapping(value = "/loginOut", method = RequestMethod.GET)
-    @ResponseBody
-    public SysUser getLoginOut(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        SysUser user = new SysUser();
-        user.setId(1);
-        user.setUserName("zengwu");
-        user.setRoles("admin");
-        return user;
-    }
+//    @RequestMapping(value = "/loginOut", method = RequestMethod.GET)
+//    @ResponseBody
+//    public SysUser getLoginOut(HttpServletRequest request, HttpServletResponse response) throws Exception {
+//        SysUser user = new SysUser();
+//        user.setId(1);
+//        user.setUserName("zengwu");
+//        user.setRoles("admin");
+//        return user;
+//    }
 
 
-    @RequestMapping(value="/learn",method = RequestMethod.GET)
+    @RequestMapping(value = "/learn", method = RequestMethod.GET)
     public String getLearn(HttpServletRequest request, HttpServletResponse response) throws Exception {
         return "learn-resource";
     }
 
 
-    @RequestMapping(value="/learn1",method = RequestMethod.GET)
+    @RequestMapping(value = "/learn1", method = RequestMethod.GET)
     public String getLearn1(HttpServletRequest request, HttpServletResponse response) throws Exception {
         return "learn-resource2";
     }

@@ -28,10 +28,7 @@
             $("#doLogin").click(function (e) {
                 var name = $("#username").val();
                 var paw = $("#password").val();
-                var a = name.empty();
-                if (name.empty() || paw.empty()) {
-                    $.messager.alert("提示", '账号密码不能为空！');
-                }
+
                 // $.ajax({
                 //     type : "POST",
                 //     url : "/login",

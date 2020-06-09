@@ -34,17 +34,21 @@ public class UserService<T extends SysUser> implements UserDetailsService {
             }
             //用户权限
             List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-            if (user.getRoleList().size() > 0) {
-                user.getRoleList().forEach(sysRole -> {
-                    if (StringUtils.isNotBlank(sysRole.getRoleName())) {
-                        authorities.add(new SimpleGrantedAuthority(sysRole.getRoleName().trim()));
-                    }
-                });
-            }
+
+            user.getRoleList().forEach(sysRole -> {
+                if (StringUtils.isNotBlank(sysRole.getRoleName())) {
+                    authorities.add(new SimpleGrantedAuthority(sysRole.getRoleName().trim()));
+                }
+            });
+
             return new User(user.getUserName(), user.getPassword(), authorities);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public SysUser getUser(String username) {
+        return repository.findByUserName(username);
     }
 }
