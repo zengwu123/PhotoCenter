@@ -1,6 +1,7 @@
 package com.photo.center.service;
 
 import com.photo.center.domain.admin.SysUser;
+import com.photo.center.vo.SysUserVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class UserServiceTest {
 
     @Test
     public void getUser() {
-        SysUser user = userService.getUser("zengwu");
+        SysUserVO user = userService.getUserById(1L);
         System.out.println(user);
     }
 }
