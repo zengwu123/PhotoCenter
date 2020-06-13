@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author: zeng wu
@@ -28,4 +29,13 @@ public class SysUserVO implements Serializable {
     private String password;
 
     private int status;// 1:正常状态,0：用户失效.
+
+    private Date lastLoginTime;
+    private String imageUrl;
+    private int notExpired;
+    private int accountNotLocked;
+    private Date createTime;
+    private Date updateTime;
+    private String createUser;
+    private String updateUser;
 }

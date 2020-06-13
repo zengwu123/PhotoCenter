@@ -10,9 +10,11 @@ import java.util.Map;
  * @param <T>
  */
 public class PageUtil<T> implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private int page; //当前页
     private int rows; //每页多少条
-    private static final long serialVersionUID = 1L;
     private List<T> records = Collections.emptyList();
     private Map<String, Object> condition;
 

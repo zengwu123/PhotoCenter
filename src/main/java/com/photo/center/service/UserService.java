@@ -2,6 +2,7 @@ package com.photo.center.service;
 
 import com.photo.center.domain.admin.SysUser;
 import com.photo.center.repository.UserRepository;
+import com.photo.center.util.MD5Util;
 import com.photo.center.util.PageUtil;
 import com.photo.center.vo.SysUserVO;
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +23,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +37,8 @@ public class UserService implements UserDetailsService {
 
     @Resource
     private UserRepository repository;
+
+    private final String imgUrl = "/assets/images/dudu.jpg";
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -72,17 +76,31 @@ public class UserService implements UserDetailsService {
         repository.deleteById(id);
     }
 
-    public void saveUser(SysUserVO sysUserVO) {
+    public void saveUser(SysUserVO sysUserVO, String name) {
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(sysUserVO, sysUser);
-        sysUser.setPassword("bbd126f4856c57f68d4e30264da6a4e6");
-        sysUser.setStatus(1);
+        sysUser.setPassword(MD5Util.encode("123456"));
+        sysUser.setCreateTime(new Date());
+        sysUser.setUpdateTime(new Date());
+        sysUser.setCreateUser(name);
+        sysUser.setUpdateUser(name);
+        if (sysUserVO.getImageUrl() == null || "".equals(sysUserVO.getImageUrl())) {
+            sysUser.setImageUrl(imgUrl);
+        }
         repository.save(sysUser);
     }
 
-    public void updateUser(SysUserVO sysUserVO) {
+    public void updateUser(SysUserVO sysUserVO, String name) {
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(sysUserVO, sysUser);
+        if(sysUserVO.getPassword()!=null&&!"".equals(sysUserVO.getPassword())){
+            sysUser.setPassword(MD5Util.encode(sysUserVO.getPassword()));
+        }
+        sysUser.setUpdateTime(new Date());
+        sysUser.setUpdateUser(name);
+        if (sysUserVO.getImageUrl() == null || "".equals(sysUserVO.getImageUrl())) {
+            sysUser.setImageUrl(imgUrl);
+        }
         repository.save(sysUser);
     }
 
@@ -98,8 +116,11 @@ public class UserService implements UserDetailsService {
                 if (condition != null && condition.size() > 0) {
                     condition.forEach((k, v) -> {
 
-                        if (k != null && "userName".equals(k) && v != null) {
+                        if (k != null && "userName".equals(k) && v != null && !"".equals(v)) {
                             predicateList.add(criteriaBuilder.like(root.get("userName"), "%" + v + "%"));
+                        }
+                        if (k != null && "createUser".equals(k) && v != null && !"".equals(v)) {
+                            predicateList.add(criteriaBuilder.like(root.get("createUser"), "%" + v + "%"));
                         }
                         if (k != null && "status".equals(k) && v != null && !"".equals(v)) {
                             predicateList.add(criteriaBuilder.equal(root.get("status"), v));
@@ -111,7 +132,7 @@ public class UserService implements UserDetailsService {
             }
         };
 
-        List<SysUser> list = repository.findAll(queryCondition, PageRequest.of(page.getPage() - 1, page.getRows(), Sort.by(Sort.Direction.DESC, "userName"))).getContent();
+        List<SysUser> list = repository.findAll(queryCondition, PageRequest.of(page.getPage() - 1, page.getRows(), Sort.by(Sort.Direction.ASC, "id"))).getContent();
         List<SysUserVO> listVo = new ArrayList();
         list.forEach(user -> {
             SysUserVO sysUserVO = new SysUserVO();
@@ -119,5 +140,14 @@ public class UserService implements UserDetailsService {
             listVo.add(sysUserVO);
         });
         return listVo;
+    }
+
+    public SysUserVO queryUserByName(String name) {
+        SysUserVO sysUserVO = new SysUserVO();
+        SysUser user = repository.findByUserName(name);
+        if (user != null && !"".equals(user)) {
+            BeanUtils.copyProperties(user, sysUserVO);
+        }
+        return sysUserVO;
     }
 }

@@ -5,6 +5,7 @@ import com.photo.center.service.UserService;
 import com.photo.center.util.PageUtil;
 import com.photo.center.vo.SysUserVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,20 +40,20 @@ public class AdminController {
 
     @RequestMapping("/add")
     @ResponseBody
-    public Map saveUser(@RequestBody SysUserVO sysUserVO) {
+    public Map saveUser(@RequestBody SysUserVO sysUserVO, Authentication authentication) {
 
         Map map = new HashMap();
-        userService.saveUser(sysUserVO);
+        userService.saveUser(sysUserVO, authentication.getName());
         map.put("code", 0);
         return map;
     }
 
     @RequestMapping("/update")
     @ResponseBody
-    public Map updateUser(@RequestBody SysUserVO sysUserVO) {
+    public Map updateUser(@RequestBody SysUserVO sysUserVO, Authentication authentication) {
 
         Map map = new HashMap();
-        userService.updateUser(sysUserVO);
+        userService.updateUser(sysUserVO, authentication.getName());
         map.put("code", 0);
         return map;
     }
@@ -62,7 +63,7 @@ public class AdminController {
     public Map deleteUser(@RequestBody Long[] ids) {
 
         Map map = new HashMap();
-        for (int i=0;i<ids.length;i++) {
+        for (int i = 0; i < ids.length; i++) {
             userService.deleteUserById(ids[i]);
         }
         map.put("code", 0);
@@ -73,9 +74,16 @@ public class AdminController {
     @ResponseBody
     public Map queryUserList(PageUtil page) {
         List<SysUserVO> list = userService.queryUserList(page);
-        PageInfo<SysUserVO> pageInfo =new PageInfo<SysUserVO>(list);
-        Map map =new HashMap();
+        PageInfo<SysUserVO> pageInfo = new PageInfo<SysUserVO>(list);
+        Map map = new HashMap();
         map.put("page", pageInfo);
         return map;
+    }
+
+    @RequestMapping("/queryUserByName")
+    @ResponseBody
+    public SysUserVO queryUserByName(Authentication authentication) {
+        SysUserVO sysUserVO = userService.queryUserByName(authentication.getName());
+        return sysUserVO;
     }
 }

@@ -6,6 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,6 +42,15 @@ public class SysUser implements Cloneable, Serializable {
     private String password;
     @Column(columnDefinition = "enum(1,0)")
     private int status;// 1:正常状态,0：用户失效.
+
+    private Date lastLoginTime;
+    private String imageUrl;
+    private int notExpired;
+    private int accountNotLocked;
+    private Date createTime;
+    private Date updateTime;
+    private String createUser;
+    private String updateUser;
 
     @ManyToMany(fetch = FetchType.EAGER) // 立即从数据库中进行加载数据
     @JoinTable(name = "SysUserRole", joinColumns = { @JoinColumn(name = "uid") }, inverseJoinColumns = {
