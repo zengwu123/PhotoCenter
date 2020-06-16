@@ -2,6 +2,7 @@ package com.photo.center.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.photo.center.service.UserService;
+import com.photo.center.util.JpaPageHelper;
 import com.photo.center.util.PageUtil;
 import com.photo.center.vo.SysUserVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +75,8 @@ public class AdminController {
     @ResponseBody
     public Map queryUserList(PageUtil page) {
         List<SysUserVO> list = userService.queryUserList(page);
-        PageInfo<SysUserVO> pageInfo = new PageInfo<SysUserVO>(list);
+        PageInfo pageInfo = JpaPageHelper.SetStartPage(list, page.getPage(), page.getRows());
+
         Map map = new HashMap();
         map.put("page", pageInfo);
         return map;

@@ -9,6 +9,19 @@
             padding: 0px;
             margin-top: -4px;
         }
+        .fileinput-button {
+            position: relative;
+            display: inline-block;
+        }
+
+        .fileinput-button input{
+            position:absolute;
+            right: 0px;
+            top: 0px;
+            opacity: 0;
+            -ms-filter: 'alpha(opacity=0)';
+            font-size: 200px;
+        }
     </style>
     <script type="text/javascript">
         $(function () {
@@ -288,9 +301,9 @@
                             <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                                 <img class="nav-user-photo" th:src="@{/assets/images/dudu.jpg}"/>
                                 <span class="user-info">
-                            <small>欢迎光临,</small>
-                            <span>大神</span>
-						</span>
+                                    <small>欢迎光临,</small>
+                                    <span>大神</span>
+                                </span>
                                 <i class="icon-caret-down"></i>
                             </a>
                             <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
@@ -314,127 +327,21 @@
                 <a class="menu-toggler" id="menu-toggler" href="#"> <span class="menu-text"></span></a>
                 <div class="sidebar" id="sidebar">
                     <ul id="menus" class="nav nav-list">
-                        <li>
+                        <li v-for="menu in menuList">
                             <a href="#" class="dropdown-toggle">
-                                <i class="icon-desktop"></i>
-                                <span class="menu-text">教程管理</span>
+<!--                                <i class="icon-desktop"></i>-->
+                                <span class="menu-text">{{menu.permissionName}}</span>
                                 <b class="arrow icon-angle-down"></b>
                             </a>
                             <ul class="submenu">
-                                <li>
-                                    <a id="learn" value="learn" class="changeUrl">
+                                <li v-for="per in menu.children">
+                                    <a v-bind:id="per.id" v-bind:value="per.permissionUrl" class="changeUrl">
                                         <i class="icon-double-angle-right"></i>
-                                        SpringBoot学习资料
-                                    </a>
-                                </li>
-                                <li>
-                                    <a id="learn1" value="learn1" class="changeUrl">
-                                        <i class="icon-double-angle-right"></i>
-                                        最美的太阳
+                                        {{per.permissionName}}
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="#" class="dropdown-toggle">
-                                <i class="icon-cogs"></i>
-                                <span class="menu-text">系统管理</span>
-
-                                <b class="arrow icon-angle-down"></b>
-                            </a>
-
-                            <ul class="submenu">
-                                <li>
-                                    <a id="user" value="admin/user" class="changeUrl">
-                                        <i class="icon-double-angle-right"></i>
-                                        用户管理
-                                    </a>
-                                </li>
-                                <li>
-                                    <a id="role" value="admin/role" class="changeUrl">
-                                        <i class="icon-double-angle-right"></i>
-                                        角色管理
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="#" class="dropdown-toggle">
-                                <i class="icon-list"></i>
-                                <span class="menu-text">客户-套餐管理</span>
-                                <b class="arrow icon-angle-down"></b>
-                            </a>
-                            <ul class="submenu">
-                                <li>
-                                    <a href="elements.html" class="changeUrl">
-                                        <i class="icon-double-angle-right"></i>
-                                        客户信息管理
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="elements.html" class="changeUrl">
-                                        <i class="icon-double-angle-right"></i>
-                                        套餐模板管理
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#" class="dropdown-toggle">
-                                <i class="icon-edit"></i>
-                                <span class="menu-text">岗位体系管理</span>
-                            </a>
-                        </li>
-
-
-                        <li>
-                            <a href="#" class="dropdown-toggle">
-                                <i class="icon-cloud"></i>
-                                <span class="menu-text">资源管理</span>
-
-                                <b class="arrow icon-angle-down"></b>
-                            </a>
-
-                            <ul class="submenu">
-                                <li>
-                                    <a href="tables.html">
-                                        <i class="icon-double-angle-right"></i>
-                                        课程资源管理
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="tables.html">
-                                        <i class="icon-double-angle-right"></i>
-                                        课件资源管理
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="tables.html">
-                                        <i class="icon-double-angle-right"></i>
-                                        考试资源管理
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#" class="dropdown-toggle">
-                                <i class="icon-globe"></i>
-                                <span class="menu-text"> 系统信息管理 </span>
-
-                                <b class="arrow icon-angle-down"></b>
-                            </a>
-
-                            <ul class="submenu">
-                                <li>
-                                    <a href="tables.html">
-                                        <i class="icon-double-angle-right"></i>
-                                        新客户审核
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
                     </ul>
                     <div class="sidebar-collapse" id="sidebar-collapse">
                         <i class="icon-double-angle-left"
@@ -442,6 +349,7 @@
                            data-icon2="icon-double-angle-right"></i>
                     </div>
                 </div>
+
                 <div class="main-content">
                     <ul class="nav nav-tabs" role="tablist" style="height:34px">
                         <li role="presentation" class="active" style="margin-right: 4px;">
@@ -502,14 +410,8 @@
                 </div>
                 <!-- /#ace-settings-container -->
             </div>
-            <!-- /.main-container-inner -->
-            <!--
-            <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
-                <i class="icon-double-angle-up icon-only bigger-110"></i>
-            </a>
-             -->
+
         </div>
-        <!-- /.main-container -->
 
         <!--新增窗口-->
         <div id="userManagement" class="bootbox modal fade" tabindex="-1" role="dialog">
@@ -523,16 +425,34 @@
                     <div class="modal-body">
                         <form class="form-horizontal" role="form" onsubmit="return false;">
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">用户名</label>
+                                <label class="col-sm-2 control-label">头像</label>
                                 <div class="col-sm-7">
-                                    <input v-model="user.userName" type="text" :disabled="flag" class="form-control required"
-                                           placeholder="输入用户名"/>
+                                    <li class="light-blue">
+                                        <a href="#" class="dropdown-toggle">
+                                            <img class="nav-user-photo" th:src="@{/assets/images/dudu.jpg}"/>
+                                        </a>
+                                    </li>
+                                    <li class="light-blue" v-if="!flag">
+                                        <span class="btn btn-success fileinput-button">
+                                        <span>上传头像</span>
+                                            <input type="file">
+                                        </span>
+                                    </li>
                                 </div>
                             </div>
-                            <div class="form-group"  v-if="!flag">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">用户名</label>
+                                <div class="col-sm-7">
+                                    <input v-model="user.userName" type="text" :disabled="flag"
+                                           class="form-control required"
+                                           placeholder="请输入用户名"/>
+                                </div>
+                            </div>
+                            <div class="form-group" v-if="!flag">
                                 <label class="col-sm-2 control-label">密码</label>
                                 <div class="col-sm-7">
-                                    <input name="user.password" type="text" class="form-control required"/>
+                                    <input v-model="user.newPassword" type="password" class="form-control required"
+                                           placeholder="请输入密码"/>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -562,42 +482,47 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" v-if="!flag">
                                 <label class="col-sm-2 control-label">最近登录</label>
                                 <div class="col-sm-7">
-                                    <input v-model="user.lastLoginTime" type="text" class="form-control required" :disabled="true"/>
+                                    <input v-model="user.lastLoginTime" type="text" class="form-control required"
+                                           :disabled="true"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">创建时间</label>
                                 <div class="col-sm-7">
-                                    <input v-model="user.createTime" type="text" class="form-control required" :disabled="true"/>
+                                    <input v-model="user.createTime" type="text" class="form-control required"
+                                           :disabled="true"/>
                                 </div>
                             </div>
-                            <div class="form-group"  v-if="!flag">
+                            <div class="form-group" v-if="flag">
                                 <label class="col-sm-2 control-label">更新时间</label>
                                 <div class="col-sm-7">
-                                    <input v-model="user.updateTime" type="text" class="form-control required" :disabled="true"/>
+                                    <input v-model="user.updateTime" type="text" class="form-control required"
+                                           :disabled="true"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">创建人</label>
                                 <div class="col-sm-7">
-                                    <input v-model="user.createUser" type="text" class="form-control required" :disabled="true"/>
+                                    <input v-model="user.createUser" type="text" class="form-control required"
+                                           :disabled="true"/>
                                 </div>
                             </div>
-                            <div class="form-group"  v-if="!flag">
+                            <div class="form-group" v-if="flag">
                                 <label class="col-sm-2 control-label">更新人</label>
                                 <div class="col-sm-7">
-                                    <input v-model="user.updateUser" type="text" class="form-control required" :disabled="true"/>
+                                    <input v-model="user.updateUser" type="text" class="form-control required"
+                                           :disabled="true"/>
                                 </div>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer" v-if="!flag">
-                        <button data-bb-handler="confirm" type="button" id="saveLearnBtn" @click="saveOrUpdate"
+                        <button data-bb-handler="confirm" type="button" id="saveLearnBtn" @click="editBtn"
                                 class="btn btn-success radius">
-                            <span><i class="icon-ok"></i></span> &nbsp;修  改
+                            <span><i class="icon-ok"></i></span> &nbsp;修 改
                         </button>
                         <button data-bb-handler="cancel" type="button" class="btn btn-danger radius" @click="cancel">
                             取消

@@ -12,6 +12,7 @@ $(function () {
         height: window.screen.height - 550,
         colModel: [
             {label: 'id', name: 'id', width: 75},
+            {label: '密码', name: 'password', width: 75,hidden:true},
             {label: '用户名', name: 'userName', width: 200},
             {
                 label: '状态',

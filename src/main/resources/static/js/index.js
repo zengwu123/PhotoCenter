@@ -6,7 +6,22 @@ var vm = new Vue({
     data: {
         title: null,
         flag: true,
-        user: {}
+        user: {},
+        menuList:{}
+    },
+    mounted: function () {
+        $.ajax({
+            type: "POST",
+            url: baseURL + "queryMenuList",
+            contentType: "application/json",
+            dataType: "json",
+            success: function (r) {
+                vm.menuList = r;
+            },
+            error: function (data) {
+                console.info("error: " + data.responseText);
+            }
+        });
     },
     methods: {
         queryUserInfo: function () {
@@ -57,7 +72,7 @@ var vm = new Vue({
             });
 
         },
-        saveOrUpdate: function () {
+        editBtn: function () {
             $.ajax({
                 type: "POST",
                 url: baseURL + "admin/update",
@@ -66,7 +81,7 @@ var vm = new Vue({
                 data: JSON.stringify(vm.user),
                 success: function (r) {
                     if (r.code === 0) {
-                        alert('操作成功', function () {
+                        alert('设置成功', function () {
                             $("#userManagement").modal('hide');
                         });
                     } else {

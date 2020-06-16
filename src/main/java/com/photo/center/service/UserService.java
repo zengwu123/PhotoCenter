@@ -1,13 +1,15 @@
 package com.photo.center.service;
 
+import com.photo.center.domain.admin.SysPermission;
+import com.photo.center.domain.admin.SysRole;
 import com.photo.center.domain.admin.SysUser;
 import com.photo.center.repository.UserRepository;
 import com.photo.center.util.MD5Util;
 import com.photo.center.util.PageUtil;
+import com.photo.center.vo.MenuVO;
 import com.photo.center.vo.SysUserVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,10 +24,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static java.util.Comparator.comparing;
 
 /**
  * @Author: zengwu
@@ -93,13 +94,17 @@ public class UserService implements UserDetailsService {
     public void updateUser(SysUserVO sysUserVO, String name) {
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(sysUserVO, sysUser);
-        if(sysUserVO.getPassword()!=null&&!"".equals(sysUserVO.getPassword())){
-            sysUser.setPassword(MD5Util.encode(sysUserVO.getPassword()));
+        if (sysUserVO.getNewPassword() != null && !"".equals(sysUserVO.getNewPassword()) && !sysUserVO.getNewPassword().equals(sysUserVO.getPassword())) {
+            sysUser.setPassword(MD5Util.encode(sysUserVO.getNewPassword()));
         }
         sysUser.setUpdateTime(new Date());
         sysUser.setUpdateUser(name);
         if (sysUserVO.getImageUrl() == null || "".equals(sysUserVO.getImageUrl())) {
             sysUser.setImageUrl(imgUrl);
+        }
+        if (sysUserVO.getRoleList() == null || "".equals(sysUserVO.getRoleList())) {
+            SysUser byUserName = repository.findByUserName(name);
+            sysUser.setRoleList(byUserName.getRoleList());
         }
         repository.save(sysUser);
     }
@@ -132,7 +137,8 @@ public class UserService implements UserDetailsService {
             }
         };
 
-        List<SysUser> list = repository.findAll(queryCondition, PageRequest.of(page.getPage() - 1, page.getRows(), Sort.by(Sort.Direction.ASC, "id"))).getContent();
+        Sort.Order order = new Sort.Order(Sort.Direction.DESC, "updateTime");
+        List<SysUser> list = repository.findAll(queryCondition, Sort.by(order));
         List<SysUserVO> listVo = new ArrayList();
         list.forEach(user -> {
             SysUserVO sysUserVO = new SysUserVO();
@@ -149,5 +155,45 @@ public class UserService implements UserDetailsService {
             BeanUtils.copyProperties(user, sysUserVO);
         }
         return sysUserVO;
+    }
+
+    public List<MenuVO> queryMenuList(String name) {
+
+        List<MenuVO> menuVOS = new ArrayList<>();
+        SysUser user = repository.findByUserName(name);
+        if (user != null && !"".equals(user)) {
+            List<SysRole> roleList = user.getRoleList();
+            Set<SysPermission> perList = new HashSet<>();
+            roleList.forEach(role -> {
+                perList.addAll(role.getPermissions());
+            });
+
+            List<SysPermission> list = new ArrayList(perList);
+
+            list.forEach(item -> {
+                if (item.getParentId() == 0) {
+                    MenuVO menuVO = new MenuVO();
+                    menuVO.setId(item.getId());
+                    menuVO.setPermissionName(item.getPermissionName());
+                    menuVO.setPermissionUrl(item.getPermissionUrl());
+                    menuVO.setOrderNum(item.getOrderNum());
+                    menuVO.setChildren(getChildren(list, item.getId()));
+                    menuVOS.add(menuVO);
+                }
+            });
+        }
+        menuVOS.sort(comparing(MenuVO::getOrderNum));
+        return menuVOS;
+    }
+
+    private List<SysPermission> getChildren(List<SysPermission> list, long id) {
+        List<SysPermission> perList = new ArrayList<>();
+        list.forEach(item -> {
+            if (item.getParentId() == id) {
+                perList.add(item);
+            }
+        });
+        perList.sort(comparing(SysPermission::getOrderNum));
+        return perList;
     }
 }

@@ -5,7 +5,6 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author: zeng wu
@@ -35,7 +34,8 @@ public class SysPermission implements Serializable {
 
     @Column(name = "parent_id")
     private Long parentId; // 父编号
-//    private String parentIds; // 父编号列表
+
+    private int orderNum; //排序编号
 //    private Boolean available = Boolean.FALSE;
 
 }
