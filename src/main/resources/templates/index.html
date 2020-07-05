@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <title>YY - 相册中心</title>
     <style>
@@ -302,7 +303,7 @@
                                 <img class="nav-user-photo" th:src="@{/assets/images/dudu.jpg}"/>
                                 <span class="user-info">
                                     <small>欢迎光临,</small>
-                                    <span>大神</span>
+                                    <span sec:authentication="name"></span>
                                 </span>
                                 <i class="icon-caret-down"></i>
                             </a>
@@ -335,7 +336,7 @@
                             </a>
                             <ul class="submenu">
                                 <li v-for="per in menu.children">
-                                    <a v-bind:id="per.id" v-bind:value="per.permissionUrl" class="changeUrl">
+                                    <a :id="per.id" :value="per.permissionUrl" class="changeUrl">
                                         <i class="icon-double-angle-right"></i>
                                         {{per.permissionName}}
                                     </a>
